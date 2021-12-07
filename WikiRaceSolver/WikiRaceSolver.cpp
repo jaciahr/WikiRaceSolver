@@ -12,9 +12,8 @@ int readVertex(string name) {
 	ifstream iFile("SampleData/SampleVertices.txt");
 	string line;
 	while (getline(iFile, line)) {
-		vertexString = line.substr(0, 1);
-		vertex = stoi(vertexString);
-		temp = line.substr(3, line.length() - 4);
+		iFile >> vertex;
+		getline(iFile, temp);
 		if (temp == name)
 			return vertex;
 	}
@@ -41,8 +40,8 @@ vector<int> readEdges(int vertex) {
 }
 
 int main() {
-	string exName = "Alexander Seton (d. 1332)";
+	string exName = " \"Alexander Seton (d. 1332)\"";
 	int exVertex = readVertex(exName);
 	vector<int> exEdges = readEdges(exVertex);
-	cout << "This vertex: " << exName << " has " << exEdges.size() << " edges." << endl;
+	cout << "This vertex:" << exName << " has " << exEdges.size() << " edges." << endl;
 }
