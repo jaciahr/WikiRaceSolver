@@ -12,7 +12,7 @@ int readVertex(string name) {
 	while (iFile) {
 		iFile >> vertex;
 		getline(iFile, temp);
-		if (temp == name)
+		if (temp.substr(2, temp.size() - 3) == name)
 			return vertex;
 	}
 	iFile.close();
@@ -38,9 +38,8 @@ vector<int> readEdges(int vertex) {
 }
 
 int main() {
-	string exName = " \"Mid-West Region legislative election, 1964\"";
+	string exName = "Alexander Seton (d. 1332)";
 	int exVertex = readVertex(exName);
 	vector<int> exEdges = readEdges(exVertex);
-	cout << "This vertex:" << exName << " has " << exEdges.size() << " edges." << endl;
-	//^should say: This vertex: Mid-West Region leglislative election, 1964 has 5 edges. 
+	cout << "This vertex: " << exName << " has " << exEdges.size() << " edges." << endl;
 }
