@@ -6,12 +6,10 @@
 using namespace std;
 
 int readVertex(string name) {
-	string vertexString;
 	int vertex;
 	string temp;
 	ifstream iFile("SampleData/SampleVertices.txt");
-	string line;
-	while (getline(iFile, line)) {
+	while (iFile) {
 		iFile >> vertex;
 		getline(iFile, temp);
 		if (temp == name)
@@ -40,8 +38,9 @@ vector<int> readEdges(int vertex) {
 }
 
 int main() {
-	string exName = " \"Alexander Seton (d. 1332)\"";
+	string exName = " \"Mid-West Region legislative election, 1964\"";
 	int exVertex = readVertex(exName);
 	vector<int> exEdges = readEdges(exVertex);
 	cout << "This vertex:" << exName << " has " << exEdges.size() << " edges." << endl;
+	//^should say: This vertex: Mid-West Region leglislative election, 1964 has 5 edges. 
 }
