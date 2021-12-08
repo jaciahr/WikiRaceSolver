@@ -5,16 +5,18 @@
 #include <unordered_map>
 using namespace std;
 
-class AdjacencyList {
-    int numVertices;
-    list<int>* adjLists;
+struct AdjacencyList {
+    unordered_map<int, vector<int>> adjList;
 
-public:
-    AdjacencyList(int numVertices) {
-        this->numVertices = numVertices;
-    }
-    void addEdge(int src, int dest) {
-        adjLists[src].push_back(dest);
+    void makeAdjList() {
+        int from, to;
+        ifstream iFile("SampleData/SampleEdges.txt");
+        while (iFile) {
+            iFile >> from;
+            iFile >> to;
+            adjList[from].push_back(to);
+        }
+        iFile.close();
     }
 };
 
@@ -60,7 +62,7 @@ string readVertexName(int ID) {
     iFile.close();
 }
 
-vector<int> readEdges(int vertex, AdjacencyList adjList) {
+vector<int> readEdges(int vertex, AdjacencyList &adjList) {
     int from;
     int to;
     vector<int> edges;
