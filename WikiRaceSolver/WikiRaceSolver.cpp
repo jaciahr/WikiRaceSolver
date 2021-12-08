@@ -82,7 +82,8 @@ vector<int> readEdges(int vertex, Graph matrix) {
                to the ID of the last vertex (i.e., 4203055 x 4203055), it
                would be too large (at least for my PC's specs, since that's
                what the heap is dependent on). Should we rename vertex ID's
-               to their appropriate line number? */
+               to their appropriate line number? 
+            */
         }
     }
     iFile.close();
@@ -98,5 +99,6 @@ int main() {
     for (int i = 0; i < exEdges.size(); i++) {
         cout << readVertexName(exEdges[i]) << endl;
     }
+    //This is obviously huge so you're just going to be spammed with 0's lol
     //exMatrix.printMatrix();
 }
