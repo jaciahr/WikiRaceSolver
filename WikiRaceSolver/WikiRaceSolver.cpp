@@ -81,6 +81,7 @@ struct elgGraph {
     vector<pair<int, int>> elg;
     vector<int> results;
     map<int, bool> visited;
+    map<int, int> prevs;
 
     void MakeELG() {
         int from, to;
@@ -96,37 +97,52 @@ struct elgGraph {
     void BFS(int start, int target) {
         queue<int> q;
         q.push(start);
+        visited[start] = true;
+        prevs[start] = -1;
         while (!q.empty()) {
             //vector<int> tempVector;
             int temp = q.front();
-            results.push_back(temp);
             q.pop();
-            if (!visited[elg[temp].second]) {
-                for (auto i : elg) {
-                    if (temp == i.first) {
-                        q.push(i.second);
-                    }
+            for (int i = 0; i < elg.size() - 1; i++) {
+                if (temp == elg[i].first && !visited[elg[i].second]) {
+                    visited[elg[i].second] = true;
+                    prevs[elg[i].second] = temp;
+                    q.push(elg[i].second);
                 }
-                visited[elg[temp].second] = true;
             }
-            /*for (int i = 0; i < tempVector.size(); i++) {
-                q.push(tempVector[i]);
-            }*/
         }
+        path(start, target);
     }
 
     void DFS(int start, int target) {
-        /*results.push_back(start);
-        if (start == target) {
-            results.push_back(target);
+        stack<int> q;
+        q.push(start);
+        visited[start] = true;
+        prevs[start] = -1;
+        while (!q.empty()) {
+            int temp = q.top();
+            q.pop();
+            for (int i = 0; i < elg.size() - 1; i++) {
+                if (temp == elg[i].first && !visited[elg[i].second]) {
+                    visited[elg[i].second] = true;
+                    prevs[elg[i].second] = temp;
+                    q.push(elg[i].second);
+                }
+            }
+        }
+        path(start, target);
+    }
+
+    void path(int start, int target) {
+        if (!visited[target]) {
+            results.push_back(-1);
             return;
         }
-        for (int i = 0; i < elg[start].size(); i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                DFS(i, target);
-            }
-        }*/
+        while (target != start) {
+            results.push_back(target);
+            target = prevs[target];
+        }
+        results.push_back(start);
     }
 };
 
@@ -214,5 +230,8 @@ int main() {
     else if (options == 4) {
         eGraph.MakeELG();
         eGraph.DFS(startID, targetID);
+        for (int i = 0; i < eGraph.results.size(); i++) {
+            cout << eGraph.results[i] << endl;
+        }
     }
 }
