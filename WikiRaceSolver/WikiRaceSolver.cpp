@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <queue>
 #include <stack>
 #include <algorithm>
@@ -10,8 +10,9 @@
 using namespace std;
 
 struct AdjacencyList {
-    unordered_map<int, vector<int>> adjList;
-    unordered_map<int, bool> visited;
+    map<int, vector<int>> adjList;
+    map<int, bool> visited;
+    map<int, int> prevs;
     vector<int> results;
 
     void makeAdjList() {
@@ -29,50 +30,57 @@ struct AdjacencyList {
         queue<int> q;
         q.push(start);
         visited[start] = true;
+        prevs[start] = -1;
         while (!q.empty()) {
-            vector<int> tempVector;
             int temp = q.front();
-            results.push_back(temp);
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
                     visited[i] = true;
+                    prevs[i] = temp;
                     q.push(i);
                 }
             }
-            for (int i = 0; i < tempVector.size(); i++) {
-                q.push(tempVector[i]);
-            }
         }
+        path(start, target);
     }
 
     void DFS(int start, int target) {
         stack<int> q;
         q.push(start);
         visited[start] = true;
+        prevs[start] = -1;
         while (!q.empty()) {
-            vector<int> tempVector;
             int temp = q.top();
-            results.push_back(temp);
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
                     visited[i] = true;
+                    prevs[i] = temp;
                     q.push(i);
                 }
             }
-            sort(tempVector.begin(), tempVector.begin() + tempVector.size());
-            for (int i = 0; i < tempVector.size(); i++) {
-                q.push(tempVector[i]);
-            }
         }
+        path(start, target);
+    }
+
+    void path(int start, int target) {
+        if (!visited[target]) {
+            results.push_back(-1);
+            return;
+        }
+        while (target != start) {
+            results.push_back(target);
+            target = prevs[target];
+        }
+        results.push_back(start);
     }
 };
 
 struct elgGraph {
     vector<pair<int, int>> elg;
     vector<int> results;
-    unordered_map<int, bool> visited;
+    map<int, bool> visited;
 
     void MakeELG() {
         int from, to;
