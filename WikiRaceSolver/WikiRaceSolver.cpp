@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 #include <queue>
+#include <stack>
+#include <algorithm>
 using namespace std;
 
 struct AdjacencyList {
@@ -44,15 +46,23 @@ struct AdjacencyList {
     }
 
     void DFS(int start, int target) {
-        results.push_back(start);
-        if (start == target) {
-            results.push_back(target);
-            return;
-        }
-        for (int i = 0; i < adjList[start].size(); i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                DFS(i, target);
+        stack<int> q;
+        q.push(start);
+        visited[start] = true;
+        while (!q.empty()) {
+            vector<int> tempVector;
+            int temp = q.top();
+            results.push_back(temp);
+            q.pop();
+            for (int i : adjList[temp]) {
+                if (!visited[i]) {
+                    visited[i] = true;
+                    q.push(i);
+                }
+            }
+            sort(tempVector.begin(), tempVector.begin() + tempVector.size());
+            for (int i = 0; i < tempVector.size(); i++) {
+                q.push(tempVector[i]);
             }
         }
     }
@@ -114,22 +124,6 @@ string readVertexName(int ID) {
     return "";
 }
 
-//this code will prbably be taken out, but let's keep it for now as a reference
-//vector<int> readEdges(int vertex) {
-//    int from, to;
-//    vector<int> edges;
-//    ifstream iFile("SampleData/SampleEdges.txt");
-//    while (iFile) {
-//        iFile >> from;
-//        iFile >> to;
-//        if (from == vertex) {
-//            edges.push_back(to);
-//        }
-//    }
-//    iFile.close();
-//    return edges;
-//}
-
 int main() {
     AdjacencyList aGraph;
     elgGraph eGraph;
@@ -154,16 +148,22 @@ int main() {
     if (options == 1) {
         aGraph.makeAdjList();
         aGraph.BFS(startID, targetID);
-        for (int i = 0; i < aGraph.results.size(); i++) {
-            cout << aGraph.results[i] << endl;
+        cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
+        cout << "The shortest path is: ";
+        for (int i = 0; i < aGraph.results.size() - 1; i++) {
+            cout << aGraph.results[i] << ", ";
         }
+        cout << aGraph.results[aGraph.results.size() - 1] << "." << endl;
     }
     else if (options == 2) {
         aGraph.makeAdjList();
         aGraph.DFS(startID, targetID);
-        for (int i = 0; i < aGraph.results.size(); i++) {
-            cout << aGraph.results[i] << endl;
+        cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
+        cout << "The shortest path is: ";
+        for (int i = 0; i < aGraph.results.size() - 1; i++) {
+            cout << aGraph.results[i] << ", ";
         }
+        cout << aGraph.results[aGraph.results.size() - 1] << "." << endl;
     }
     else if (options == 3) {
         eGraph.MakeELG();
@@ -174,13 +174,4 @@ int main() {
         eGraph.MakeELG();
         eGraph.DFS(startID, targetID);
     }
-
-    //this code will prbably be taken out, but let's keep it for now as a reference
-    /*string exName = "Alexander Seton (d. 1332)";
-    int exVertex = readVertexID(exName);
-    vector<int> exEdges = readEdges(exVertex);
-    cout << "This vertex: " << exName << " has these following edges: " << endl;
-    for (int i = 0; i < exEdges.size(); i++) {
-        cout << readVertexName(exEdges[i]) << endl;
-    }*/
 }
