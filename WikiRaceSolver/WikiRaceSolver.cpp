@@ -33,6 +33,9 @@ struct AdjacencyList {
         prevs[start] = -1;
         while (!q.empty()) {
             int temp = q.front();
+            if (temp == target) {
+                break;
+            }
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
@@ -52,6 +55,9 @@ struct AdjacencyList {
         prevs[start] = -1;
         while (!q.empty()) {
             int temp = q.top();
+            if (temp == target) {
+                break;
+            }
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
@@ -95,40 +101,86 @@ struct elgGraph {
 
     void BFS(int start, int target) {
         queue<int> q;
-        q.push(start);
-        visited[start] = true;
-        prevs[start] = -1;
+        q.push(target);
+        visited[target] = true;
+        prevs[target] = -1;
         while (!q.empty()) {
+            bool quick = false;
             int temp = q.front();
+            if (temp == start) {
+                break;
+            }
             q.pop();
-            for (int i = 0; i < elg.size() - 1; i++) {
-                if (temp == elg[i].first && !visited[elg[i].second]) {
-                    visited[elg[i].second] = true;
-                    prevs[elg[i].second] = temp;
-                    q.push(elg[i].second);
+            if (temp < 62975) {
+                for (int i = 0; i < elg.size() - 1; i++) {
+                    if (quick && temp != elg[i].second) {
+                        break;
+                    }
+                    if (temp == elg[i].second && !visited[elg[i].first]) {
+                        visited[elg[i].first] = true;
+                        prevs[elg[i].first] = temp;
+                        q.push(elg[i].first);
+                        quick = true;
+                    }
+                }
+            }
+            else {
+                for (int i = elg.size() - 2; i > -1; i--) {
+                    if (quick && temp != elg[i].second) {
+                        break;
+                    }
+                    if (temp == elg[i].second && !visited[elg[i].first]) {
+                        visited[elg[i].first] = true;
+                        prevs[elg[i].first] = temp;
+                        q.push(elg[i].first);
+                        quick = true;
+                    }
                 }
             }
         }
-        path(start, target);
+        path(target, start);
     }
 
     void DFS(int start, int target) {
         stack<int> q;
-        q.push(start);
-        visited[start] = true;
-        prevs[start] = -1;
+        q.push(target);
+        visited[target] = true;
+        prevs[target] = -1;
         while (!q.empty()) {
+            bool quick = false;
             int temp = q.top();
+            if (temp == start) {
+                break;
+            }
             q.pop();
-            for (int i = 0; i < elg.size() - 1; i++) {
-                if (temp == elg[i].first && !visited[elg[i].second]) {
-                    visited[elg[i].second] = true;
-                    prevs[elg[i].second] = temp;
-                    q.push(elg[i].second);
+            if (temp < 62975) {
+                for (int i = 0; i < elg.size() - 1; i++) {
+                    if (quick && temp != elg[i].second) {
+                        break;
+                    }
+                    if (temp == elg[i].second && !visited[elg[i].first]) {
+                        visited[elg[i].first] = true;
+                        prevs[elg[i].first] = temp;
+                        q.push(elg[i].first);
+                        quick = true;
+                    }
+                }
+            }
+            else {
+                for (int i = elg.size() - 2; i > -1; i--) {
+                    if (quick && temp != elg[i].second) {
+                        break;
+                    }
+                    if (temp == elg[i].second && !visited[elg[i].first]) {
+                        visited[elg[i].first] = true;
+                        prevs[elg[i].first] = temp;
+                        q.push(elg[i].first);
+                        quick = true;
+                    }
                 }
             }
         }
-        path(start, target);
+        path(target, start);
     }
 
     void path(int start, int target) {
@@ -243,10 +295,10 @@ int main() {
         }
         cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = eGraph.results.size() - 1; i > 0; i--) {
+        for (int i = 0; i < eGraph.results.size() - 1; i++) {
             cout << readVertexName(eGraph.results[i]) << ", ";
         }
-        cout << readVertexName(eGraph.results[0]) << "." << endl;
+        cout << readVertexName(eGraph.results[eGraph.results.size() - 1]) << "." << endl;
     }
     else if (options == "4") {
         eGraph.MakeELG();
@@ -257,9 +309,9 @@ int main() {
         }
         cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = eGraph.results.size() - 1; i > 0; i--) {
+        for (int i = 0; i < eGraph.results.size() - 1; i++) {
             cout << readVertexName(eGraph.results[i]) << ", ";
         }
-        cout << readVertexName(eGraph.results[0]) << "." << endl;
+        cout << readVertexName(eGraph.results[eGraph.results.size() - 1]) << "." << endl;
     }
 }
