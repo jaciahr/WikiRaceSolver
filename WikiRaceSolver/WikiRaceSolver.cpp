@@ -2,18 +2,18 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <queue>;
+#include <map>
+#include <queue>
 using namespace std;
 
 struct AdjacencyList {
-    unordered_map<int, vector<int>> adjList;
-    unordered_map<int, bool> visited;
+    map<int, vector<int>> adjList;
+    map<int, bool> visited;
     vector<int> results;
 
     void makeAdjList() {
         int from, to;
-        ifstream iFile("SampleData/SampleEdges.txt");
+        ifstream iFile("SampleData/testedges.txt");
         while (iFile) {
             iFile >> from;
             iFile >> to;
@@ -23,20 +23,22 @@ struct AdjacencyList {
     }
 
     void BFS(int start, int target) {
-        int temp;
         queue<int> q;
         q.push(start);
         visited[start] = true;
-        results.push_back(start);
         while (!q.empty()) {
-            temp = q.front();
+            vector<int> tempVector;
+            int temp = q.front();
             results.push_back(temp);
             q.pop();
-            for (int i = 0; i < adjList[temp].size(); i++) {
+            for (int i : adjList[temp]) {
                 if (!visited[i]) {
                     visited[i] = true;
                     q.push(i);
                 }
+            }
+            for (int i = 0; i < tempVector.size(); i++) {
+                q.push(tempVector[i]);
             }
         }
     }
@@ -62,7 +64,7 @@ struct elgGraph {
 
     void MakeELG() {
         int from, to;
-        ifstream iFile("SampleData/SampleEdges.txt");
+        ifstream iFile("SampleData/testedges.txt");
         while (iFile) {
             iFile >> from;
             iFile >> to;
@@ -83,7 +85,7 @@ struct elgGraph {
 int readVertexID(string name) {
     int vertex;
     string temp;
-    ifstream iFile("SampleData/SampleNames.txt");
+    ifstream iFile("SampleData/testvertices.txt");
     while (iFile) {
         iFile >> vertex;
         getline(iFile, temp);
@@ -99,7 +101,7 @@ int readVertexID(string name) {
 string readVertexName(int ID) {
     int vertex;
     string temp;
-    ifstream iFile("SampleData/SampleNames.txt");
+    ifstream iFile("SampleData/testvertices.txt");
     while (iFile) {
         iFile >> vertex;
         getline(iFile, temp);
@@ -155,17 +157,20 @@ int main() {
         for (int i = 0; i < aGraph.results.size(); i++) {
             cout << aGraph.results[i] << endl;
         }
-    } else if (options == 2) {
+    }
+    else if (options == 2) {
         aGraph.makeAdjList();
         aGraph.DFS(startID, targetID);
         for (int i = 0; i < aGraph.results.size(); i++) {
             cout << aGraph.results[i] << endl;
         }
-    } else if (options == 3) {
+    }
+    else if (options == 3) {
         eGraph.MakeELG();
         eGraph.BFS(startID, targetID);
 
-    } else if (options == 4) {
+    }
+    else if (options == 4) {
         eGraph.MakeELG();
         eGraph.DFS(startID, targetID);
     }
