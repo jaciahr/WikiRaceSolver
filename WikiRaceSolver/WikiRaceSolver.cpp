@@ -2,13 +2,14 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <queue>
+#include <utility> 
 using namespace std;
 
 struct AdjacencyList {
-    map<int, vector<int>> adjList;
-    map<int, bool> visited;
+    unordered_map<int, vector<int>> adjList;
+    unordered_map<int, bool> visited;
     vector<int> results;
 
     void makeAdjList() {
@@ -60,7 +61,8 @@ struct AdjacencyList {
 
 struct elgGraph {
     vector<pair<int, int>> elg;
-    vector<int> result;
+    vector<int> results;
+    unordered_map<int, bool> visited;
 
     void MakeELG() {
         int from, to;
@@ -74,11 +76,39 @@ struct elgGraph {
     }
 
     void BFS(int start, int target) {
-
+        queue<int> q;
+        q.push(start);
+        while (!q.empty()) {
+            //vector<int> tempVector;
+            int temp = q.front();
+            results.push_back(temp);
+            q.pop();
+            if (!visited[elg[temp].second]) {
+                for (auto i : elg) {
+                    if (temp == i.first) {
+                        q.push(i.second);
+                    }
+                }
+                visited[elg[temp].second] = true;
+            }
+            /*for (int i = 0; i < tempVector.size(); i++) {
+                q.push(tempVector[i]);
+            }*/
+        }
     }
 
     void DFS(int start, int target) {
-
+        /*results.push_back(start);
+        if (start == target) {
+            results.push_back(target);
+            return;
+        }
+        for (int i = 0; i < elg[start].size(); i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                DFS(i, target);
+            }
+        }*/
     }
 };
 
@@ -168,6 +198,9 @@ int main() {
     else if (options == 3) {
         eGraph.MakeELG();
         eGraph.BFS(startID, targetID);
+        for (int i = 0; i < eGraph.results.size(); i++) {
+            cout << eGraph.results[i] << endl;
+        }
 
     }
     else if (options == 4) {
