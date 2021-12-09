@@ -17,7 +17,7 @@ struct AdjacencyList {
 
     void makeAdjList() {
         int from, to;
-        ifstream iFile("SampleData/testedges.txt");
+        ifstream iFile("SampleData/SampleEdges.txt");
         while (iFile) {
             iFile >> from;
             iFile >> to;
@@ -66,7 +66,6 @@ struct AdjacencyList {
 
     void path(int start, int target) {
         if (!visited[target]) {
-            results.push_back(-1);
             return;
         }
         while (target != start) {
@@ -85,7 +84,7 @@ struct elgGraph {
 
     void MakeELG() {
         int from, to;
-        ifstream iFile("SampleData/testedges.txt");
+        ifstream iFile("SampleData/SampleEdges.txt");
         while (iFile) {
             iFile >> from;
             iFile >> to;
@@ -100,7 +99,6 @@ struct elgGraph {
         visited[start] = true;
         prevs[start] = -1;
         while (!q.empty()) {
-            //vector<int> tempVector;
             int temp = q.front();
             q.pop();
             for (int i = 0; i < elg.size() - 1; i++) {
@@ -135,7 +133,6 @@ struct elgGraph {
 
     void path(int start, int target) {
         if (!visited[target]) {
-            results.push_back(-1);
             return;
         }
         while (target != start) {
@@ -149,7 +146,7 @@ struct elgGraph {
 int readVertexID(string name) {
     int vertex;
     string temp;
-    ifstream iFile("SampleData/testvertices.txt");
+    ifstream iFile("SampleData/SampleNames.txt");
     while (iFile) {
         iFile >> vertex;
         getline(iFile, temp);
@@ -165,7 +162,7 @@ int readVertexID(string name) {
 string readVertexName(int ID) {
     int vertex;
     string temp;
-    ifstream iFile("SampleData/testvertices.txt");
+    ifstream iFile("SampleData/SampleNames.txt");
     while (iFile) {
         iFile >> vertex;
         getline(iFile, temp);
@@ -182,56 +179,87 @@ int main() {
     AdjacencyList aGraph;
     elgGraph eGraph;
 
-    int options, startID, targetID;
-    string temp, start, target;
+    int startID, targetID;
+    string options, start, target;
     cout << "Choose one of the options below:" << endl;
     cout << "1: Adjacency List Graph with BFS" << endl;
     cout << "2: Adjacency List Graph with DFS" << endl;
     cout << "3: Edge List Graph with BFS" << endl;
     cout << "4: Edge List Graph with DFS" << endl;
-    getline(cin, temp);
-    options = stoi(temp);
+    getline(cin, options);
+    if (options != "1" && options != "2" && options != "3" && options != "4") {
+        cout << "Invalid option choice." << endl;
+        return 0;
+    }
     cout << "Input name of starting site." << endl;
     getline(cin, start);
+    startID = readVertexID(start);
+    if (startID == -1) {
+        cout << "That site does not exist within the database." << endl;
+        return 0;
+    }
     cout << "Input name of target site." << endl;
     getline(cin, target);
-
-    startID = readVertexID(start);
     targetID = readVertexID(target);
+    if (targetID == -1) {
+        cout << "That site does not exist within the database." << endl;
+        return 0;
+    }
 
-    if (options == 1) {
+    if (options == "1") {
         aGraph.makeAdjList();
         aGraph.BFS(startID, targetID);
+        if (aGraph.results.size() == 0) {
+            cout << "There is no path between these sites." << endl;
+            return 0;
+        }
         cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = 0; i < aGraph.results.size() - 1; i++) {
-            cout << aGraph.results[i] << ", ";
+        for (int i = aGraph.results.size() - 1; i > 0; i--) {
+            cout << readVertexName(aGraph.results[i]) << ", ";
         }
-        cout << aGraph.results[aGraph.results.size() - 1] << "." << endl;
+        cout << readVertexName(aGraph.results[0]) << "." << endl;
     }
-    else if (options == 2) {
+    else if (options == "2") {
         aGraph.makeAdjList();
         aGraph.DFS(startID, targetID);
+        if (aGraph.results.size() == 0) {
+            cout << "There is no path between these sites." << endl;
+            return 0;
+        }
         cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = 0; i < aGraph.results.size() - 1; i++) {
-            cout << aGraph.results[i] << ", ";
+        for (int i = aGraph.results.size() - 1; i > 0; i--) {
+            cout << readVertexName(aGraph.results[i]) << ", ";
         }
-        cout << aGraph.results[aGraph.results.size() - 1] << "." << endl;
+        cout << readVertexName(aGraph.results[0]) << "." << endl;
     }
-    else if (options == 3) {
+    else if (options == "3") {
         eGraph.MakeELG();
         eGraph.BFS(startID, targetID);
-        for (int i = 0; i < eGraph.results.size(); i++) {
-            cout << eGraph.results[i] << endl;
+        if (eGraph.results.size() == 0) {
+            cout << "There is no path between these sites." << endl;
+            return 0;
         }
-
+        cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
+        cout << "The shortest path is: ";
+        for (int i = eGraph.results.size() - 1; i > 0; i--) {
+            cout << readVertexName(eGraph.results[i]) << ", ";
+        }
+        cout << readVertexName(eGraph.results[0]) << "." << endl;
     }
-    else if (options == 4) {
+    else if (options == "4") {
         eGraph.MakeELG();
         eGraph.DFS(startID, targetID);
-        for (int i = 0; i < eGraph.results.size(); i++) {
-            cout << eGraph.results[i] << endl;
+        if (eGraph.results.size() == 0) {
+            cout << "There is no path between these sites." << endl;
+            return 0;
         }
+        cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
+        cout << "The shortest path is: ";
+        for (int i = eGraph.results.size() - 1; i > 0; i--) {
+            cout << readVertexName(eGraph.results[i]) << ", ";
+        }
+        cout << readVertexName(eGraph.results[0]) << "." << endl;
     }
 }
