@@ -33,9 +33,8 @@ struct AdjacencyList {
         prevs[start] = -1;
         while (!q.empty()) {
             int temp = q.front();
-            if (temp == target) {
+            if (temp == target)
                 break;
-            }
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
@@ -55,9 +54,8 @@ struct AdjacencyList {
         prevs[start] = -1;
         while (!q.empty()) {
             int temp = q.top();
-            if (temp == target) {
+            if (temp == target)
                 break;
-            }
             q.pop();
             for (int i : adjList[temp]) {
                 if (!visited[i]) {
@@ -71,9 +69,8 @@ struct AdjacencyList {
     }
 
     void path(int start, int target) {
-        if (!visited[target]) {
+        if (!visited[target])
             return;
-        }
         while (target != start) {
             results.push_back(target);
             target = prevs[target];
@@ -84,9 +81,9 @@ struct AdjacencyList {
 
 struct elgGraph {
     vector<pair<int, int>> elg;
-    vector<int> results;
     map<int, bool> visited;
     map<int, int> prevs;
+    vector<int> results;
 
     void MakeELG() {
         int from, to;
@@ -107,15 +104,13 @@ struct elgGraph {
         while (!q.empty()) {
             bool quick = false;
             int temp = q.front();
-            if (temp == start) {
+            if (temp == start)
                 break;
-            }
             q.pop();
             if (temp < 62975) {
                 for (int i = 0; i < elg.size() - 1; i++) {
-                    if (quick && temp != elg[i].second) {
+                    if (quick && temp != elg[i].second)
                         break;
-                    }
                     if (temp == elg[i].second && !visited[elg[i].first]) {
                         visited[elg[i].first] = true;
                         prevs[elg[i].first] = temp;
@@ -126,9 +121,8 @@ struct elgGraph {
             }
             else {
                 for (int i = elg.size() - 2; i > -1; i--) {
-                    if (quick && temp != elg[i].second) {
+                    if (quick && temp != elg[i].second)
                         break;
-                    }
                     if (temp == elg[i].second && !visited[elg[i].first]) {
                         visited[elg[i].first] = true;
                         prevs[elg[i].first] = temp;
@@ -149,15 +143,13 @@ struct elgGraph {
         while (!q.empty()) {
             bool quick = false;
             int temp = q.top();
-            if (temp == start) {
+            if (temp == start)
                 break;
-            }
             q.pop();
             if (temp < 62975) {
                 for (int i = 0; i < elg.size() - 1; i++) {
-                    if (quick && temp != elg[i].second) {
+                    if (quick && temp != elg[i].second)
                         break;
-                    }
                     if (temp == elg[i].second && !visited[elg[i].first]) {
                         visited[elg[i].first] = true;
                         prevs[elg[i].first] = temp;
@@ -168,9 +160,8 @@ struct elgGraph {
             }
             else {
                 for (int i = elg.size() - 2; i > -1; i--) {
-                    if (quick && temp != elg[i].second) {
+                    if (quick && temp != elg[i].second)
                         break;
-                    }
                     if (temp == elg[i].second && !visited[elg[i].first]) {
                         visited[elg[i].first] = true;
                         prevs[elg[i].first] = temp;
@@ -184,9 +175,8 @@ struct elgGraph {
     }
 
     void path(int start, int target) {
-        if (!visited[target]) {
+        if (!visited[target])
             return;
-        }
         while (target != start) {
             results.push_back(target);
             target = prevs[target];
@@ -267,9 +257,8 @@ int main() {
         }
         cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = aGraph.results.size() - 1; i > 0; i--) {
+        for (int i = aGraph.results.size() - 1; i > 0; i--)
             cout << readVertexName(aGraph.results[i]) << ", ";
-        }
         cout << readVertexName(aGraph.results[0]) << "." << endl;
     }
     else if (options == "2") {
@@ -281,9 +270,8 @@ int main() {
         }
         cout << "There are " << aGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = aGraph.results.size() - 1; i > 0; i--) {
+        for (int i = aGraph.results.size() - 1; i > 0; i--)
             cout << readVertexName(aGraph.results[i]) << ", ";
-        }
         cout << readVertexName(aGraph.results[0]) << "." << endl;
     }
     else if (options == "3") {
@@ -295,9 +283,8 @@ int main() {
         }
         cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = 0; i < eGraph.results.size() - 1; i++) {
+        for (int i = 0; i < eGraph.results.size() - 1; i++)
             cout << readVertexName(eGraph.results[i]) << ", ";
-        }
         cout << readVertexName(eGraph.results[eGraph.results.size() - 1]) << "." << endl;
     }
     else if (options == "4") {
@@ -309,9 +296,8 @@ int main() {
         }
         cout << "There are " << eGraph.results.size() << " degrees of separation." << endl;
         cout << "The shortest path is: ";
-        for (int i = 0; i < eGraph.results.size() - 1; i++) {
+        for (int i = 0; i < eGraph.results.size() - 1; i++)
             cout << readVertexName(eGraph.results[i]) << ", ";
-        }
         cout << readVertexName(eGraph.results[eGraph.results.size() - 1]) << "." << endl;
     }
 }
